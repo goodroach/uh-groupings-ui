@@ -695,8 +695,8 @@
         }
 
         $scope.verfySize = function(inputFile) {
-            let fileSize = inputFile.size;
-            if (inputFile !== )
+            const fileSize = inputFile.size;
+            if (fileSize = )
         }
 
 
