@@ -40,8 +40,8 @@
         </div>
     </div>
     <p>
-        <span class="modal-black-text" th:text="#{screen.message.modal.remove.confirmation}"></span>
-        <span class="modal-black-text">{{listName}} list.</span>
+        <span class="text-dark" th:text="#{screen.message.modal.remove.confirmation}"></span>
+        <span class="text-dark">{{listName}} list.</span>
     </p>
     <table>
         <tr>
@@ -58,14 +58,14 @@
         </tr>
     </table>
     <p>
-        <span class="modal-black-text">Are you sure you want to remove</span>
+        <span class="text-dark">Are you sure you want to remove</span>
         <span class="font-weight-bold">{{user}}</span>
-        <span class="modal-black-text"> from the {{listName}} list?</span>
+        <span class="text-dark"> from the {{listName}} list?</span>
     </p>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="proceedRemoveUser()">Yes</button>
-    <button class="btn btn-light" ng-click="cancelRemoveUser()" data-dismiss="modal">Cancel</button>
+    <button class="btn btn-primary" ng-click="removeModalProceed()">Yes</button>
+    <button class="btn btn-light" ng-click="removeModalCancel()" data-dismiss="modal">Cancel</button>
 </div>
 
 </html>
