@@ -186,7 +186,7 @@ describe("GroupingsService", function () {
 
     describe("removeFromGroups", function () {
         let groups;
-        let member;
+        let member = "";
         it("should call dataProvider.updateData", function () {
             spyOn(dp, "updateData");
             gs.removeFromGroups(groups, member, onSuccess, onError);
@@ -256,7 +256,7 @@ describe("GroupingsService", function () {
     });
 
     describe("getMemberAttributes", function () {
-        let member;
+        let member = "";
         it("should call dataProvider.loadData", function () {
             spyOn(dp, "loadData");
             gs.getMemberAttributes(member, onSuccess, onError);
@@ -306,6 +306,21 @@ describe("GroupingsService", function () {
         it("should use the correct path", function () {
             gs.getMembershipResults(onSuccess, onError);
             httpBackend.expectGET(BASE_URL + "members/groupings/").respond(200);
+            expect(httpBackend.flush).not.toThrow();
+        });
+    });
+
+    describe("managePersonResults", function () {
+        let member = "";
+        it("should call dataProvider.loadData", function () {
+            spyOn(dp, "loadData");
+            gs.managePersonResults(member, onSuccess, onError);
+            expect(dp.loadData).toHaveBeenCalled();
+        });
+
+        it("should use the correct path", function () {
+            gs.managePersonResults(member, onSuccess, onError);
+            httpBackend.expectGET(BASE_URL + "members/" + member + "/groupings/all").respond(200);
             expect(httpBackend.flush).not.toThrow();
         });
     });

@@ -200,7 +200,19 @@ public class GroupingsRestController {
     @GetMapping(value = "/members/groupings")
     public ResponseEntity<String> membershipResults(Principal principal) {
         logger.info("Entered REST membershipResults...");
-        String uri = String.format(API_2_1_BASE + "/members/%s/groupings", principal.getName());
+        String principalName = policy.sanitize(principal.getName());
+        String uri = String.format(API_2_1_BASE + "/members/%s/groupings", principalName);
+        return httpRequestService.makeApiRequest(principalName, uri, HttpMethod.GET);
+    }
+
+    /**
+     * Get a list of all groupings that the uhIdentifier is associated with.
+     */
+    @GetMapping(value = "/members/{uhIdentifier}/groupings/all")
+    public ResponseEntity<String> managePersonResults(Principal principal, @PathVariable String uhIdentifier) {
+        logger.info("Entered REST managePersonResults...");
+        String safeInput = policy.sanitize(uhIdentifier);
+        String uri = String.format(API_2_1_BASE + "/members/%s/groupings/all", safeInput);
         return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
     }
 
