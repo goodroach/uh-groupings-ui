@@ -659,15 +659,38 @@
          */
         $scope.readTextFile = function (inputFile) {
             const type = inputFile.type;
-            if ($scope.verifyContentType(inputFile)) {
-                console.log(type + "was incorrect!");
+            if (!$scope.verifyImportFileType(inputFile)) {
                 $scope.launchDynamicModal(
                     Message.Title.INVALID_FILE,
-                    'Only .txt files are accepted.',
-                    8000
+                    'File must be a .txt file.'
                 );
+                console.log(type + " has an invalid file type.")
+                return;
             }
-            console.log(type + "was correct!")
+            if (!$scope.verifyImportFileSize(inputFile)) {
+                $scope.launchDynamicModal(
+                    Message.Title.INVALID_FILE,
+                    'File is too large. Maximum file size: 5MB'
+                );
+                console.log(type + " has an invalid file type.")
+                return;
+            }
+            if (!$scope.verifyImportFileNameSize(inputFile)){
+                $scope.launchDynamicModal(
+                    Message.Title.INVALID_FILE,
+                    'File name has too many characters. Maximum character amount: 50'
+                );
+                console.log(type + " has an invalid file type.")
+                return;
+            }
+            if (!$scope.verifyImportFileName(inputFile)){
+                $scope.launchDynamicModal(
+                    Message.Title.INVALID_FILE,
+                    'File name has illegal characters.'
+                );
+                console.log(type + " has an invalid file type.")
+                return;
+            }
             let reader = new FileReader();
             reader.onload = function (e) {
                 const str = e.target.result;
@@ -678,13 +701,27 @@
             reader.readAsText(inputFile);
         };
 
-        $scope.verifyContentType = function(inputFile) {
-            let fileType = inputFile.type;
-            if (fileType !== "text/plain") {
+        $scope.verifyImportFileType = function(inputFile) {
+            if (inputFile == null || inputFile.type == null) {
                 return false;
             }
-            return true;
-        }
+            return inputFile.type.toLowerCase() === 'text/plain';
+        };
+
+        $scope.verifyImportFileSize = function(inputFile) {
+            return inputFile.size <= 5242880 && inputFile.size > 0;
+        };
+
+        $scope.verifyImportFileNameSize = function(inputFile) {
+            console.log(inputFile);
+            return inputFile.name.length <= 53 && inputFile.name.length > 0;
+        };
+
+        $scope.verifyImportFileName = function(inputFile) {
+            let regex = /^[a-zA-Z0-9._-]+$/;
+            console.log(inputFile.name);
+            return regex.test(inputFile.name);
+        };
 
         $scope.removeTextFile = function () {
             angular.element(document.querySelector("#upload")).val(null);
