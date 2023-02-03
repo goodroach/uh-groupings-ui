@@ -4,12 +4,7 @@
 
         <div class="row">
             <div class="col-md-8">
-                <h1 class="font-weight-bold text-dark pt-2 mb-0 d-inline-block">Owners ({{groupingOwners.length}})</h1>
-                <div class="spinner-border ml-1 d-inline-block"
-                     ng-hide="paginatingComplete"
-                     role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
+                <h1 class="font-weight-bold text-dark pt-2 mb-0">Owners ({{groupingOwners.length}})</h1>
             </div>
             <div class="col-md-4 py-2">
                 <input placeholder="Filter Members..." type="text" title="Filter Members"
@@ -52,7 +47,7 @@
                             </span>
                         </span>
                         <span ng-if="groupingOwners.length === 1">
-                            <span class="fa fa-question-circle fa-pull-right pt-1" role="button"
+                            <span class="far fa-trash-alt fa-pull-right pt-1 fa-trash-alt-disabled" role="button"
                                   data-toggle="tooltip" data-placement="top" data-boundary="window"
                                   onmouseover="$(this).tooltip('show')" onmouseout="$(this).tooltip('dispose')"
                                   th:title="#{screen.message.common.tooltip.remove.warning}">
@@ -89,6 +84,7 @@
                         </div>
                         <div id = "memBtns">
                             <button class="btn btn-primary add-margin"
+                                    ng-blur="dismissErrors()"
                                     ng-click="addOnClick('owners')">
                                 Add
                             </button>
