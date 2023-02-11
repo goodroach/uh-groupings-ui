@@ -1,46 +1,67 @@
 
-describe("GeneralController", () => {
+describe('TimeoutJsController', function () {
+    beforeEach(module('UHGroupingsApp'));
 
-    beforeEach(module("UHGroupingsApp"));
-    beforeEach(module("ngMockE2E"));
+    let $scope, $controller, $timeout, $interval, $uibModal;
 
-    let scope;
-    let controller;
-    let httpBackend;
-    let BASE_URL;
-    let gs;
-    let uibModal;
-
-    beforeEach(inject(($rootScope, $controller, _BASE_URL_, _$httpBackend_, groupingsService, $uibModal, $window) => {
-        scope = $rootScope.$new();
-        controller = $controller("GeneralJsController", {
-            $scope: scope
-        });
-        httpBackend = _$httpBackend_;
-        BASE_URL = _BASE_URL_;
-        gs = groupingsService;
-        uibModal = $uibModal;
-        window = $window;
+    beforeEach(inject(function (_$rootScope_, _$controller_, _$timeout_, _$interval_, _$uibModal_) {
+        $scope = _$rootScope_.$new();
+        $controller = _$controller_;
+        $timeout = _$timeout_;
+        $interval = _$interval_;
+        $uibModal = _$uibModal_;
     }));
 
-    it("should clear the timeouts and intervals when DOM is destroyed.", () => {
+    it('should reset timeouts when the createTimeoutModalPromise is cancelled', function () {
+        spyOn($timeout, 'cancel');
+        $controller('TimeoutJsController', {
+            $scope: $scope,
+            $window: {},
+            $uibModal: $uibModal,
+            $controller: $controller,
+            dataProvider: {},
+            BASE_URL: '',
+            $timeout: $timeout,
+            $interval: $interval
+        });
 
+        $timeout.cancel.cancel();
+        expect($timeout.cancel).toHaveBeenCalled();
     });
 
-    it("should close the timeout modal.", () => {
-        spyOn(scope.timeoutModalInstance, "close").and.callThrough();
-        scope.createApiErrorModal();
+    it('should clear timeouts and intervals when the DOM is destroyed', function () {
+        spyOn($timeout, 'cancel');
+        spyOn($interval, 'cancel');
+        $controller('TimeoutJsController', {
+            $scope: $scope,
+            $window: {},
+            $uibModal: $uibModal,
+            $controller: $controller,
+            dataProvider: {},
+            BASE_URL: '',
+            $timeout: $timeout,
+            $interval: $interval
+        });
+
+        $scope.$destroy();
+        expect($timeout.cancel).toHaveBeenCalled();
+        expect($interval.cancel).toHaveBeenCalled();
     });
 
-    it("should ping the server.", () => {
-        spyOn(scope, "getGroupingInformation").and.callThrough();
-        scope.displayGrouping(0, 0);
-        expect(scope.getGroupingInformation).toHaveBeenCalled();
-    });
+    it('should restart the countdown timer', function () {
+        spyOn($interval, 'cancel');
+        $controller('TimeoutJsController', {
+            $scope: $scope,
+            $window: {},
+            $uibModal: $uibModal,
+            $controller: $controller,
+            dataProvider: {},
+            BASE_URL: '',
+            $timeout: $timeout,
+            $interval: $interval
+        });
 
-    it("should log out the user.", () => {
-        spyOn(scope, "getGroupingInformation").and.callThrough();
-        scope.displayGrouping(0, 0);
-        expect(scope.getGroupingInformation).toHaveBeenCalled();
+        $restartCountdown();
+        expect($interval.cancel).toHaveBeenCalled();
     });
 });
