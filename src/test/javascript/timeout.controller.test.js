@@ -14,18 +14,7 @@ describe('TimeoutJsController', function () {
 
     it('should reset timeouts when the createTimeoutModalPromise is cancelled', function () {
         spyOn($timeout, 'cancel');
-        $controller('TimeoutJsController', {
-            $scope: $scope,
-            $window: {},
-            $uibModal: $uibModal,
-            $controller: $controller,
-            dataProvider: {},
-            BASE_URL: '',
-            $timeout: $timeout,
-            $interval: $interval
-        });
-
-        $timeout.cancel.cancel();
+        $timeout.cancel;
         expect($timeout.cancel).toHaveBeenCalled();
     });
 
